@@ -1,25 +1,31 @@
-//
-// Created by rne on 20.07.21.
-//
+#pragma once
 
-#ifndef BUFI_FINANCINGPROJECT_H
-#define BUFI_FINANCINGPROJECT_H
-
+#include <iostream>
 #include <string>
 #include <vector>
 
+/**
+ * Finanzierungsprojekt
+ */
 namespace bufi {
-	class FinancingProject {
-	private:
-		std::vector<double> payments;
-		double interestRate;
-	public:
-		FinancingProject(std::vector<double> payments, double interestRate);
-		double costs() const;
-		std::string toString() const;
+    class FinancingProject {
+    private:
+        std::vector<double> depositSurplusses;
+        double interestRate;
+    public:
+        FinancingProject(std::vector<double> const & depositSurplusses, double interestRate);
+        virtual ~FinancingProject() = default;
 
-		friend std::ostream& operator<<(std::ostream &out, FinancingProject const &project);
-	};
+        [[nodiscard]] std::vector<double> getDepositSurplusses() const;
+        [[nodiscard]] double getInvestment() const;
+        [[nodiscard]] double getCapitalValue() const;
+        [[nodiscard]] double getCapitalValueRate() const;
+        [[nodiscard]] double getPresentValue(unsigned int runtime) const;
+        [[nodiscard]] double FRMInRears(double cashFlow, unsigned int runtime) const;
+        [[nodiscard]] double FRMInAdvance(double cashFlow, unsigned int runtime) const;
+        [[nodiscard]] double equivalentFRM(double presentValue) const;
+
+        virtual void print(std::ostream& target = std::cout) const;
+        friend std::ostream& operator<<(std::ostream& target, FinancingProject const & project);
+    };
 }
-
-#endif //BUFI_FINANCINGPROJECT_H

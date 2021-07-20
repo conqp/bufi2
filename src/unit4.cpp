@@ -23,12 +23,12 @@ int main()
 	cout << "### Projects A ###\n";
 
 	for (auto const &projectA : projectsA)
-		cout << projectA << ": " << projectA.costs() << "\n";
+		cout << projectA << "-> " << projectA.getCapitalValue() << "\n";
 
-	cout << "### Projects B ###\n";
+	cout << "\n### Projects B ###\n";
 
 	for (auto const &projectB : projectsB)
-		cout << projectB << ": " << projectB.costs() << "\n";
+		cout << projectB << "->  " << projectB.getCapitalValue() << "\n";
 
 	return 0;
 }
