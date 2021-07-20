@@ -2,6 +2,8 @@
 // Created by Richard Neumann on 20.07.2021.
 //
 
+#include "bufi.h"
+using bufi::presentValue;
 #include "InvestmentProject.h"
 
 namespace bufi {
@@ -13,5 +15,9 @@ namespace bufi {
 
     double InvestmentProject::netPresentValue(double presentValue) const {
         return investmentValue + ((unitPrice - unitCost) * amount - overheadCosts) * presentValue;
+    }
+
+    double InvestmentProject::netPresentValue(double interestRate, unsigned int runtime) const {
+        return netPresentValue(presentValue(interestRate, runtime));
     }
 }

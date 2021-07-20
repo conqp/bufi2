@@ -5,8 +5,6 @@ using std::cout;
 #include <vector>
 using std::vector;
 
-#include "bufi.h"
-using bufi::presentValue;
 #include "FinancingProject.h"
 using bufi::FinancingProject;
 #include "InvestmentProject.h"
@@ -45,8 +43,8 @@ int main()
     InvestmentProject investmentProject(-30'000'000, 14'000, 11'000, 5'000, 1'500'000);
     double interestRate = 0.097;
     unsigned int runtime = 3;
-    auto presentValue_ = presentValue(interestRate, runtime);
-    cout << setprecision(12) << "\nInvestment: " << investmentProject.netPresentValue(presentValue_) << "\n";
+    auto netPresentValue = investmentProject.netPresentValue(interestRate, runtime);
+    cout << setprecision(12) << "\nInvestment: " << netPresentValue << "\n";
 
 	return 0;
 }
