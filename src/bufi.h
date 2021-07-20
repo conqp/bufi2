@@ -11,6 +11,7 @@ namespace bufi {
 	double coveringSpan(double sellingPrice, double variableUnitCosts);
 	double profitContribution(double salesVolume, double coveringSpan);
 	double depositSurplus(double profitContribution, double overheadCosts);
+    double presentValue(double interestRate, unsigned int runtime);
 	double breakEvenValue(double A0, double presentValue, double costs, double price, double unitCost);
     double breakEvenPrice(double A0, double presentValue, double costs, double amount, double unitCost);
 }

@@ -66,6 +66,11 @@ namespace bufi {
 		return profitContribution - overheadCosts;
 	}
 
+    double presentValue(double interestRate, unsigned int runtime)
+    {
+        return (1 / interestRate) * (1 - (1 / (pow(1 + interestRate, runtime))));
+    }
+
     double breakEvenValue(double A0, double presentValue, double costs, double price, double unitCost)
     {
 	    return ((A0 / presentValue) + costs) / (price - unitCost);

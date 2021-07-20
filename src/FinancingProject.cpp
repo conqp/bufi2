@@ -2,6 +2,8 @@
 #include <ostream>
 using std::endl;
 using std::ostream;
+#include <stdexcept>
+using std::invalid_argument;
 #include <string>
 using std::string;
 #include <vector>
@@ -15,6 +17,10 @@ using std::vector;
 namespace bufi {
     FinancingProject::FinancingProject(vector<double> const & depositSurplusses, double interestRate)
         : depositSurplusses(depositSurplusses), interestRate(interestRate)
+    {}
+
+    FinancingProject::FinancingProject(vector<double> const &depositSurplusses)
+        : FinancingProject(depositSurplusses, 0)
     {}
 
     double FinancingProject::getInterestFactor() const {
@@ -38,11 +44,13 @@ namespace bufi {
         return result;
     }
 
-    double FinancingProject::getCapitalValueRate() const {
+    double FinancingProject::getCapitalValueRate() const
+    {
         return getCapitalValue() / getInvestment();
     }
 
-    double FinancingProject::getPresentValue(unsigned int runtime) const {
+    double FinancingProject::getPresentValue(unsigned int runtime) const
+    {
         return (1 / interestRate) * (1 - (1 / (pow(getInterestFactor(), runtime))));
     }
 
@@ -50,7 +58,8 @@ namespace bufi {
         Fixed-rate mortgage in rears
         DE: nachschüssige Annuität
     */
-    double FinancingProject::FRMInRears(double cashFlow, unsigned int runtime) const {
+    double FinancingProject::FRMInRears(double cashFlow, unsigned int runtime) const
+    {
         return cashFlow * getPresentValue(runtime);
     }
 
@@ -58,7 +67,8 @@ namespace bufi {
         Fixed-rate mortgage in advance
         DE: vorschüssige Annuität
     */
-    double FinancingProject::FRMInAdvance(double cashFlow, unsigned int runtime) const {
+    double FinancingProject::FRMInAdvance(double cashFlow, unsigned int runtime) const
+    {
         return getInterestFactor() * FRMInRears(cashFlow, runtime);
     }
 
@@ -66,17 +76,36 @@ namespace bufi {
         Fixed-rate mortgage in advance
         DE: vorschüssige Annuität
     */
-    double FinancingProject::equivalentFRM(double presentValue) const {
+    double FinancingProject::equivalentFRM(double presentValue) const
+    {
         return getCapitalValue() / presentValue;
     }
 
-    void FinancingProject::print(ostream & target) const {
+    FinancingProject FinancingProject::operator-(FinancingProject const &other) const
+    {
+        if (interestRate != other.interestRate)
+            throw invalid_argument("Interest rates do not match.");
+
+        if (depositSurplusses.size() != other.depositSurplusses.size())
+            throw invalid_argument("Deposit surplusses sizes do not match.");
+
+        vector<double> depositSurplussesDiff;
+
+        for (size_t index = 0; index < depositSurplusses.size(); ++index)
+            depositSurplussesDiff.push_back(depositSurplusses[index] - other.depositSurplusses[index]);
+
+        return FinancingProject(depositSurplussesDiff, interestRate);
+    }
+
+    void FinancingProject::print(ostream & target) const
+    {
         target << "Deposit surplusses: " << join<double>(depositSurplusses, ", ") << endl;
         target << "Capital value: " << getCapitalValue() << endl;
         target << "Capital value rate: " << getCapitalValueRate() << endl;
     }
 
-    ostream & operator<<(ostream & target, FinancingProject const & project) {
+    ostream & operator<<(ostream & target, FinancingProject const & project)
+    {
         project.print(target);
         return target;
     }

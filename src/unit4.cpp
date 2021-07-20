@@ -1,10 +1,16 @@
+#include <iomanip>
+using std::setprecision;
 #include <iostream>
 using std::cout;
 #include <vector>
 using std::vector;
 
+#include "bufi.h"
+using bufi::presentValue;
 #include "FinancingProject.h"
 using bufi::FinancingProject;
+#include "InvestmentProject.h"
+using bufi::InvestmentProject;
 
 int main()
 {
@@ -29,6 +35,18 @@ int main()
 
 	for (auto const &projectB : projectsB)
 		cout << projectB << "->  " << projectB.getCapitalValue() << "\n";
+
+	FinancingProject p1({-100, 120}, 0.08);
+    FinancingProject p2({-80, 100}, 0.08);
+    FinancingProject p3({-90, 112}, 0.08);
+    cout << p1 - p2 << "\n";
+    cout << p3 - p2 << "\n";
+
+    InvestmentProject investmentProject(-30'000'000, 14'000, 11'000, 5'000, 1'500'000);
+    double interestRate = 0.097;
+    unsigned int runtime = 3;
+    auto presentValue_ = presentValue(interestRate, runtime);
+    cout << setprecision(12) << "\nInvestment: " << investmentProject.netPresentValue(presentValue_) << "\n";
 
 	return 0;
 }
