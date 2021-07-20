@@ -12,6 +12,8 @@ namespace bufi {
     private:
         std::vector<double> depositSurplusses;
         double interestRate;
+    private:
+        [[nodiscard]] double getInterestFactor() const;
     public:
         FinancingProject(std::vector<double> const & depositSurplusses, double interestRate);
         virtual ~FinancingProject() = default;

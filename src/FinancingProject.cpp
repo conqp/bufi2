@@ -17,29 +17,33 @@ namespace bufi {
         : depositSurplusses(depositSurplusses), interestRate(interestRate)
     {}
 
+    double FinancingProject::getInterestFactor() const {
+        return 1 + interestRate;
+    }
+
     vector<double> FinancingProject::getDepositSurplusses() const {
         return depositSurplusses;
     }
 
     double FinancingProject::getInvestment() const {
-        return abs(depositSurplusses[0]);
+        return abs(depositSurplusses.at(0));
     }
 
     double FinancingProject::getCapitalValue() const {
         double result = 0;
 
         for (long unsigned int i = 0; i < depositSurplusses.size(); i++)
-            result += depositSurplusses[i] / pow(1 + interestRate, i);
+            result += depositSurplusses[i] / pow(getInterestFactor(), i);
 
         return result;
     }
 
     double FinancingProject::getCapitalValueRate() const {
-        return getCapitalValue() / abs(depositSurplusses[0]);
+        return getCapitalValue() / getInvestment();
     }
 
     double FinancingProject::getPresentValue(unsigned int runtime) const {
-        return (1 / interestRate) * (1 - (1 / (pow(1 + interestRate, runtime))));
+        return (1 / interestRate) * (1 - (1 / (pow(getInterestFactor(), runtime))));
     }
 
     /*
@@ -55,7 +59,7 @@ namespace bufi {
         DE: vorschüssige Annuität
     */
     double FinancingProject::FRMInAdvance(double cashFlow, unsigned int runtime) const {
-        return (1 + interestRate) * FRMInRears(cashFlow, runtime);
+        return getInterestFactor() * FRMInRears(cashFlow, runtime);
     }
 
     /*
